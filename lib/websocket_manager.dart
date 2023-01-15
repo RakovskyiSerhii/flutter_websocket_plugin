@@ -15,7 +15,7 @@ const String _METHOD_CHANNEL_TEST_ECHO = 'echoTest';
 
 /// Provides an easy way to create native websocket connection.
 class WebsocketManager {
-  WebsocketManager(this.url, [this.header]) {
+  WebsocketManager(this.url, {required this.header}) {
     _create();
   }
 
@@ -27,12 +27,12 @@ class WebsocketManager {
       EventChannel(_EVENT_CHANNEL_MESSAGE);
   static const EventChannel _eventChannelClose =
       EventChannel(_EVENT_CHANNEL_DONE);
-  static StreamSubscription<dynamic> _onMessageSubscription;
-  static StreamSubscription<dynamic> _onCloseSubscription;
-  static Stream<dynamic> _eventsMessage;
-  static Stream<dynamic> _eventsClose;
-  static Function(dynamic) _messageCallback;
-  static Function(dynamic) _closeCallback;
+  static StreamSubscription<dynamic>? _onMessageSubscription;
+  static StreamSubscription<dynamic>? _onCloseSubscription;
+  static Stream<dynamic>? _eventsMessage;
+  static Stream<dynamic>? _eventsClose;
+  static Function(dynamic)? _messageCallback;
+  static Function(dynamic)? _closeCallback;
 
   static Future<void> echoTest() async {
     final dynamic result =
@@ -51,7 +51,7 @@ class WebsocketManager {
           break;
       }
       return;
-    });
+    } as Future<dynamic> Function(MethodCall)?);
     // print(url);
     // print(header);
     await _channel
@@ -78,14 +78,9 @@ class WebsocketManager {
     await _channel.invokeMethod<String>(_METHOD_CHANNEL_DISCONNECT);
     _eventsMessage = null;
     if (_onMessageSubscription != null) {
-      _onMessageSubscription.cancel();
+      _onMessageSubscription!.cancel();
       _onMessageSubscription = null;
     }
-//    _eventsClose = null;
-//    if (_onCloseSubscription != null) {
-//      _onCloseSubscription.cancel();
-//      _onCloseSubscription = null;
-//    }
   }
 
   /// Send a [String] message to the connected WebSocket.
@@ -130,7 +125,7 @@ class WebsocketManager {
     if (_eventsMessage == null) {
       _eventsMessage =
           _eventChannelMessage.receiveBroadcastStream().asBroadcastStream();
-      _onMessageSubscription = _eventsMessage.listen(_messageListener);
+      _onMessageSubscription = _eventsMessage!.listen(_messageListener);
     }
   }
 
@@ -142,21 +137,21 @@ class WebsocketManager {
   void _onClose() {
     if (_eventsClose == null) {
       _eventsClose = _eventChannelClose.receiveBroadcastStream();
-      _onCloseSubscription = _eventsClose.listen(_closeListener);
+      _onCloseSubscription = _eventsClose!.listen(_closeListener);
     }
   }
 
   void _messageListener(dynamic message) {
     // print('Received message: $message');
     if (_messageCallback != null) {
-      _messageCallback(message);
+      _messageCallback!(message);
     }
   }
 
   void _closeListener(dynamic message) {
     print(message);
     if (_closeCallback != null) {
-      _closeCallback(message);
+      _closeCallback!(message);
     }
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:websocket_manager/websocket_manager.dart';
 
 void main() => runApp(MyApp());
@@ -36,12 +35,12 @@ class _MyAppState extends State<MyApp> {
             ),
             Wrap(
               children: <Widget>[
-                RaisedButton(
+                TextButton(
                   child: Text('CONFIG'),
                   onPressed: () =>
                       socket = WebsocketManager(_urlController.text),
                 ),
-                RaisedButton(
+                TextButton(
                   child: Text('CONNECT'),
                   onPressed: () {
                     if (socket != null) {
@@ -49,7 +48,7 @@ class _MyAppState extends State<MyApp> {
                     }
                   },
                 ),
-                RaisedButton(
+                TextButton(
                   child: Text('CLOSE'),
                   onPressed: () {
                     if (socket != null) {
@@ -57,7 +56,7 @@ class _MyAppState extends State<MyApp> {
                     }
                   },
                 ),
-                RaisedButton(
+                TextButton(
                   child: Text('LISTEN MESSAGE'),
                   onPressed: () {
                     if (socket != null) {
@@ -70,7 +69,7 @@ class _MyAppState extends State<MyApp> {
                     }
                   },
                 ),
-                RaisedButton(
+                TextButton(
                   child: Text('LISTEN DONE'),
                   onPressed: () {
                     if (socket != null) {
@@ -83,7 +82,7 @@ class _MyAppState extends State<MyApp> {
                     }
                   },
                 ),
-                RaisedButton(
+                TextButton(
                   child: Text('ECHO TEST'),
                   onPressed: () => WebsocketManager.echoTest(),
                 ),
