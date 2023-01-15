@@ -15,7 +15,7 @@ const String _METHOD_CHANNEL_TEST_ECHO = 'echoTest';
 
 /// Provides an easy way to create native websocket connection.
 class WebsocketManager {
-  WebsocketManager(this.url, {required this.header}) {
+  WebsocketManager(this.url, [this.header = const <String, String>{}]) {
     _create();
   }
 
